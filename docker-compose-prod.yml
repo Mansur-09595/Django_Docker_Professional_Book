@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    command: gunicorn bookstore_project.wsgi -b 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - ENVIRONMENT=production
+      - SECRET_KEY=84&if2$bqym#1@6_5*_lh5n^alewlr8k5b1%%36elfm#jm9cm)
+      - DEBUG=0
+      - STRIPE_TEST_PUBLISHABLE_KEY=pk_test_51IjRSqI2Cq6kCYaisp8svJKyH6Tloia0v57J448qqk4a2NFzzYJpTSTJFeZRsim4Ksvr0dRPq1YNWC8MtJxaF3Lg003NKwSgrs
+      - STRIPE_TEST_SECRET_KEY=sk_test_51IjRSqI2Cq6kCYaiflPWfjdZFxqJ0AlElJCiY3BNDjNMIm41YEQjMOrKxRBHRoaYcMGMJ4kkPJQ3ELNPUEI83T0I009El8EbZi
+  db:
+    image: postgres:11
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+volumes:
+  postgres_data:
